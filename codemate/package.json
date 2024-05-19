@@ -24,6 +24,10 @@
       {
         "command": "codemate.selectcode",
         "title": "Your selected code: "
+      },
+      {
+        "command": "codemate.processPrompt",
+        "title": "Process Prompt"
       }
     ]
   },
@@ -42,7 +46,9 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.11.3",
     "@langchain/google-genai": "^0.0.14",
+    "dotenv": "^16.4.5",
     "langchain": "^0.2.0"
   }
 }
