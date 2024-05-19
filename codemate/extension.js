@@ -5,6 +5,20 @@ const vscode = require('vscode');
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 
+async function getSelectedText() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor || !editor.selection) {
+    vscode.window.showErrorMessage('No selection found.');
+    return null; // Handle no selection
+  }
+
+  const selection = editor.selection;
+  const text = editor.document.getText(selection);
+
+  return text.trim(); // Remove leading/trailing whitespace
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -36,9 +50,28 @@ function activate(context) {
 		  } else {
 			return prompt.trim(); // Remove leading/trailing whitespace
 		  }
+		  
 	})
 
-	context.subscriptions.push(userPrompt);
+	let selectedText = vscode.commands.registerCommand('codemate.selectcode', async function(){
+		const editor = vscode.window.activeTextEditor;
+
+		if (!editor || !editor.selection) {
+		  vscode.window.showErrorMessage('No selection found.');
+		  return null; // Handle no selection
+		}
+	  
+		const selection = editor.selection;
+		const text = editor.document.getText(selection);
+
+		vscode.window.showInformationMessage(text.trim());
+	  
+		return text.trim(); // Remove leading/trailing whitespace
+	})
+
+	context.subscriptions.push(userPrompt); // user prompt
+
+	context.subscriptions.push(selectedText); // returns selected text
 
 	context.subscriptions.push(disposable);
 }
