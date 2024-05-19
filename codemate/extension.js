@@ -13,16 +13,32 @@ function activate(context) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "codemate" is now active!');
+	
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('codemate.helloWorld', function () {
 		// The code you place here will be executed every time your command is executed
-
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from codemate!');
 	});
+
+	let userPrompt = vscode.commands.registerCommand('codemate.Prompt', async function(){
+		const prompt = await vscode.window.showInputBox({
+			title: 'Enter your prompt:',
+			placeHolder: 'Write your code generation or debugging request here.',
+		  });
+		
+		  if (prompt === undefined) {
+			vscode.window.showErrorMessage('Prompt cancelled.');
+			return null; // Handle cancelled prompt
+		  } else {
+			return prompt.trim(); // Remove leading/trailing whitespace
+		  }
+	})
+
+	context.subscriptions.push(userPrompt);
 
 	context.subscriptions.push(disposable);
 }
